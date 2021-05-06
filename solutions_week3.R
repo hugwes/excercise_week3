@@ -103,13 +103,29 @@ ggplot(caro_filter_2, aes(E,N,colour=segment_id)) +
 
 ########################################################## 
 # Task 5: Similarity Measures
+# Import Data
+pedestrian <- read_delim("pedestrian.csv",",")
 
+ggplot(pedestrian, aes(E,N,colour=TrajID)) +
+  geom_path() +
+  geom_point() +
+  coord_fixed() +
+  labs(title="Visual comparison of the 6 trajectories") +
+  facet_wrap(~TrajID)
 
 ########################################################## 
 # Task 6: Calculate Similarity
+# Get to know the library SimilarityMeasures
+library(SimilarityMeasures)
+help(package = "SimilarityMeasures")
 
-  
-  
-  
-  
+# DTW
+
+# EditDist
+
+# Frechnet
+
+# LCSS
+
+
   
