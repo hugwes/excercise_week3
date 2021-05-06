@@ -57,7 +57,7 @@ caro <- caro %>%
 
 ##########################################################
 # Task 3: Visualize Segmented Trajectories
-ggplot(caro, aes(E, N, colour=static)) +
+ggplot(caro, aes(E,N,colour=static)) +
   geom_path(colour="black") +
   geom_point() +
   coord_fixed() +
@@ -66,7 +66,40 @@ ggplot(caro, aes(E, N, colour=static)) +
     
 ##########################################################
 # Task 4: Segment-based Analysis
+# Create a function to assign unique IDs based on the column static
+rle_id <- function(vec){
+  x <- rle(vec)$lengths
+  as.factor(rep(seq_along(x), times=x))}
 
+# Add a new coloum with the unique ID's 
+caro <- caro %>%
+  mutate(segment_id = rle_id(static))
+
+# We are just interested in the moves and not in the stops
+caro_filter_1 <- caro %>%
+  filter(!static)
+
+# Plot 1: Moving segments coloured by the segment_id (all segments)
+ggplot(caro_filter_1, aes(E,N,colour=segment_id)) +
+  geom_path() +
+  geom_point() +
+  coord_fixed() +
+  labs(title="all segments") +
+  theme_classic()
+
+# Plot 2: Moving segments coloured by the segment_id (long segments)
+caro_filter_2 <- caro %>%
+  filter(!static,
+         segment_id != "8",
+         segment_id != "10",
+         segment_id != "12")       
+
+ggplot(caro_filter_2, aes(E,N,colour=segment_id)) +
+  geom_path() +
+  geom_point() +
+  coord_fixed() +
+  labs(title="long segments") +
+  theme_classic()
 
 ########################################################## 
 # Task 5: Similarity Measures
