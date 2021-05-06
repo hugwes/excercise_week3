@@ -44,24 +44,25 @@ caro <- caro %>%
 
 ##########################################################
 # Task 2: Specify and Apply Threshold d
+# Exploring the values
+summary(caro$stepMean)
+hist(caro$stepMean)
+boxplot(caro$stepMean)
+
+# Useing the mean of all stepMean values as threshold
+# Generating a new column with the name static (stops = TRUE, moves = FALSE)
 caro <- caro %>% 
   ungroup() %>%
   mutate(static = stepMean < mean(stepMean, na.rm = TRUE))
 
 ##########################################################
 # Task 3: Visualize Segmented Trajectories
-ggplot(caro, aes(E,N), colour=static) +
-  geom_path() +
+ggplot(caro, aes(E, N, colour=static)) +
+  geom_path(colour="black") +
   geom_point() +
   coord_fixed() +
-  theme(legend.position = "bottom")
-
-caro %>%
-  ggplot(aes(E,N))  +
-  geom_path() +
-  geom_point() +
-  coord_fixed() +
-  theme(legend.position = "bottom")
+  theme(legend.position="bottom") +
+  theme_classic()
     
 ##########################################################
 # Task 4: Segment-based Analysis
