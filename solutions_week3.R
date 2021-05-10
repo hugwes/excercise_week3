@@ -111,7 +111,8 @@ ggplot(pedestrian, aes(E,N,colour=TrajID)) +
   geom_point() +
   coord_fixed() +
   labs(title="Visual comparison of the 6 trajectories") +
-  facet_wrap(~TrajID)
+  facet_wrap(~TrajID) + 
+  theme_classic()
 
 ########################################################## 
 # Task 6: Calculate Similarity
@@ -119,13 +120,97 @@ ggplot(pedestrian, aes(E,N,colour=TrajID)) +
 library(SimilarityMeasures)
 help(package = "SimilarityMeasures")
 
-# DTW
+# Filter by Trajectory & Convert them into Matrix
+ped1 <- pedestrian %>% 
+  filter(TrajID == 1)
+ped1 <- matrix(data=c(as.numeric(ped1$E),as.numeric(ped1$N)), ncol = 2)
 
-# EditDist
+ped2 <- pedestrian %>%
+  filter(TrajID == 2)
+ped2 <- matrix(data=c(as.numeric(ped2$E),as.numeric(ped2$N)), ncol = 2)
 
-# Frechnet
+ped3 <- pedestrian %>%
+  filter(TrajID == 3) 
+ped3 <- matrix(data=c(as.numeric(ped3$E), as.numeric(ped3$N)), ncol=2)
 
-# LCSS
+ped4 <- pedestrian %>%
+  filter(TrajID == 4) 
+ped4 <- matrix(data=c(as.numeric(ped4$E), as.numeric(ped4$N)), ncol=2)
 
+ped5 <- pedestrian %>%
+  filter(TrajID == 5) 
+ped5 <- matrix(data=c(as.numeric(ped5$E), as.numeric(ped5$N)), ncol=2)
 
+ped6 <- pedestrian %>%
+  filter(TrajID == 6) 
+ped6 <- matrix(data=c(as.numeric(ped6$E), as.numeric(ped6$N)), ncol=2)
+
+# Dynamic Time Warping (DTW)
+DTW1_2 <- DTW(ped1, ped2)
+DTW1_3 <- DTW(ped1, ped3)
+DTW1_4 <- DTW(ped1, ped4)
+DTW1_5 <- DTW(ped1, ped5)
+DTW1_6 <- DTW(ped1, ped6)
+
+# Edit Distance (EditDist)
+ED1_2 <- EditDist(ped1, ped2)
+ED1_3 <- EditDist(ped1, ped3)
+ED1_4 <- EditDist(ped1, ped4)
+ED1_5 <- EditDist(ped1, ped5)
+ED1_6 <- EditDist(ped1, ped6)
+
+# Frechet Calculation (Frechnet)
+Frechet1_2 <- Frechet(ped1, ped2)
+Frechet1_3 <- Frechet(ped1, ped3)
+Frechet1_4 <- Frechet(ped1, ped4)
+Frechet1_5 <- Frechet(ped1, ped5)
+Frechet1_6 <- Frechet(ped1, ped6)
+
+# Longest Common Subsequence (LCSS) --> takes ages!!!
+# Frechet1_2 <- LCSS(ped1, ped2)
+# Frechet1_3 <- LCSS(ped1, ped3)
+# Frechet1_4 <- LCSS(ped1, ped4)
+# Frechet1_5 <- LCSS(ped1, ped5)
+# Frechet1_6 <- LCSS(ped1, ped6)
+
+# Add those Values back to the Dataframe (pedestrian)
+pedestrian <- pedestrian %>%
+  mutate(DTW = case_when(
+    TrajID == "1" ~ 0,
+    TrajID == "2" ~ DTW1_2,
+    TrajID == "3" ~ DTW1_3,
+    TrajID == "4" ~ DTW1_4,
+    TrajID == "5" ~ DTW1_5,
+    TrajID == "6" ~ DTW1_6)) %>%
+  mutate(EditDist = case_when(
+    TrajID == "1" ~ 0,
+    TrajID == "2" ~ ED1_2,
+    TrajID == "3" ~ ED1_3,
+    TrajID == "4" ~ ED1_4,
+    TrajID == "5" ~ ED1_5,
+    TrajID == "6" ~ ED1_6)) %>%
+  mutate(Frechet = case_when(
+    TrajID == "1" ~ 0,
+    TrajID == "2" ~ Frechet1_2,
+    TrajID == "3" ~ Frechet1_3,
+    TrajID == "4" ~ Frechet1_4,
+    TrajID == "5" ~ Frechet1_5,
+    TrajID == "6" ~ Frechet1_6))
+
+# Plot 1: Dynamic Time Warping (DTW)
+ggplot(pedestrian, aes(TrajID, DTW, fill=TrajID)) +
+  geom_col() + 
+  labs(title = "DTW")
   
+# Plot 2: Edit Distance
+ggplot(pedestrian, aes(TrajID, EditDist, fill=TrajID)) +
+  geom_col() + 
+  labs(title = "EditDist")
+
+# Plot 3: Frechet
+ggplot(pedestrian, aes(TrajID, Frechet, fill=TrajID)) +
+  geom_col() + 
+  labs(title = "Frechet")
+
+
+
