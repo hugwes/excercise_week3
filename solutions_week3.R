@@ -167,11 +167,11 @@ Frechet1_5 <- Frechet(ped1, ped5)
 Frechet1_6 <- Frechet(ped1, ped6)
 
 # Longest Common Subsequence (LCSS) --> takes ages!!!
-# Frechet1_2 <- LCSS(ped1, ped2)
-# Frechet1_3 <- LCSS(ped1, ped3)
-# Frechet1_4 <- LCSS(ped1, ped4)
-# Frechet1_5 <- LCSS(ped1, ped5)
-# Frechet1_6 <- LCSS(ped1, ped6)
+# LCSS1_2 <- LCSS(ped1, ped2)
+# LCSS1_3 <- LCSS(ped1, ped3)
+# LCSS1_4 <- LCSS(ped1, ped4)
+# LCSS1_5 <- LCSS(ped1, ped5)
+# LCSS1_6 <- LCSS(ped1, ped6)
 
 # Add those Values back to the Dataframe (pedestrian)
 pedestrian <- pedestrian %>%
